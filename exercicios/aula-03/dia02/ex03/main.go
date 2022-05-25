@@ -105,6 +105,5 @@ func main() {
 		go retornarTotal(prods, servs, manuts)
 		fmt.Println("---------------------------")
 		time.Sleep(5 * time.Second)
-
 	}
 }
