@@ -35,6 +35,25 @@
 
 package main
 
+type cliente struct {
+	arquivo         int
+	nome, sobrenome string
+	rg, telefone    int
+	endereco        string
+}
+
+func idGenerator(clientes []cliente) int {
+	newId := len(clientes) + 100
+	return newId
+}
+
+func (c *cliente) cadastrarCliente(nome, sobrenome, endereco string, rg, telefone int, clientes []cliente) cliente {
+	idArquivo := idGenerator(clientes)
+	cliente := cliente{idArquivo, nome, sobrenome, rg, telefone, endereco}
+	clientes = append(clientes, cliente)
+	return cliente
+}
+
 func main() {
 
 }

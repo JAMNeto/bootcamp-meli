@@ -13,6 +13,15 @@
 
 package main
 
-func main() {
+import (
+	"fmt"
+	"os"
+)
 
+func main() {
+	content, err := os.ReadFile("file.txt")
+	if err != nil {
+		panic("o arquivo indicado não foi encontrado ou está danificado")
+	}
+	fmt.Println(string(content))
 }
