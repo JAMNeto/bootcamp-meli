@@ -35,6 +35,11 @@
 
 package main
 
+import (
+	"fmt"
+	"os"
+)
+
 type cliente struct {
 	arquivo         int
 	nome, sobrenome string
@@ -47,13 +52,40 @@ func idGenerator(clientes []cliente) int {
 	return newId
 }
 
-func (c *cliente) cadastrarCliente(nome, sobrenome, endereco string, rg, telefone int, clientes []cliente) cliente {
-	idArquivo := idGenerator(clientes)
-	cliente := cliente{idArquivo, nome, sobrenome, rg, telefone, endereco}
-	clientes = append(clientes, cliente)
+func cadastrarCliente(nome, sobrenome, endereco string, id, rg, telefone int, clientes []cliente) cliente {
+	defer recuperarExecucao()
+	if id < 0 {
+		panic("Valor inválido de ID")
+	}
+	cliente := cliente{id, nome, sobrenome, rg, telefone, endereco}
 	return cliente
 }
 
-func main() {
+func lerArquivo(path string) []byte {
+	defer recuperarExecucao()
+	arquivo, err := os.ReadFile("customers.txt")
+	if err != nil {
+		panic("erro: o arquivo indicado não foi encontrado ou está danificado")
+	}
+	return arquivo
+}
 
+func recuperarExecucao() {
+	if r := recover(); r != nil {
+		fmt.Println("Recuperei a execucao")
+	}
+}
+
+func main() {
+	clientes := make([]cliente, 0)
+	id1 := idGenerator(clientes)
+	cliente := cadastrarCliente("Carlos", "Souza", "AV", id1, 1233, 3333, clientes)
+	clientes = append(clientes, cliente)
+	id2 := idGenerator(clientes)
+	cliente2 := cadastrarCliente("Augusto", "Mega", "Rua", id2, 4444, 555, clientes)
+	clientes = append(clientes, cliente2)
+	arquivo := lerArquivo("customers.txt")
+	fmt.Println(clientes)
+	fmt.Println(cliente)
+	fmt.Println(arquivo)
 }
